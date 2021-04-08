@@ -14,12 +14,13 @@ namespace Application.Repositories
             _service = service;
         }
                 
-        public double CalcTaxRate(double initValue, int months)
+        public async Task<double> CalcTaxRate(double initValue, int months)
         {
             try
             {
-               double taxRate = _service.GetTaxRate().Result;            
-               return _service.CalcTaxRate(initValue, months, taxRate);
+               var taxRate = await _service.GetExternalTaxRate();
+               //taxRate = taxRate.Replace(".", ",");
+               return _service.CalcTaxRate(initValue, months, double.Parse(taxRate));
             }
             catch (Exception ex) { throw ex; }
         }

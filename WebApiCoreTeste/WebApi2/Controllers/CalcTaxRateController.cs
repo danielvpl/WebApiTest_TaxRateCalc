@@ -1,6 +1,7 @@
 ﻿using Application.Interfaces;
 using Microsoft.AspNetCore.Mvc;
 using System;
+using System.Threading.Tasks;
 
 // For more information on enabling Web API for empty projects, visit https://go.microsoft.com/fwlink/?LinkID=397860
 
@@ -19,17 +20,24 @@ namespace WebApiCore.Controllers
 
         // GET: api/<controller>
         [HttpGet("calculajuros")]       
-        public ActionResult<double> CalculaJuros(double initValue, int months)
+        public async Task<ActionResult<double>> CalculaJuros(double initValue, int months)
         {
             try
             {
-                var data = _calcTaxRateApp.CalcTaxRate(initValue, months);
+                var data = await _calcTaxRateApp.CalcTaxRate(initValue, months);
                 return Ok(data);
             }
             catch (Exception ex)
             {
                 return BadRequest(ex.Message);
             }
+        }
+
+        // GET: api/<controller>/showmethecode
+        [HttpGet("showmethecode")]
+        public ActionResult<string> ShowMeTheCode()
+        {
+            return Ok(@"https://github.com/danielvpl/WebApiTest_TaxRateCalc.git");
         }
     }
 }

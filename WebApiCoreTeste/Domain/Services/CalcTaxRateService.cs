@@ -1,37 +1,39 @@
 ﻿using Domain.Interfaces.Services;
 using System;
 using System.Net.Http;
-using System.Net.Http.Headers;
 using System.Threading.Tasks;
 
 namespace Domain.Services
 {
     public class CalcTaxRateService : ICalcTaxRateService
     {
-        public double CalcTaxRate(double initValue, int months, double taxRate) => this.Truncate(initValue * Math.Pow((1 + taxRate), (double)months));
+        public double CalcTaxRate(double initValue, int months, double taxRate) 
+            => this.Truncate(initValue * Math.Pow((1 + taxRate), months));
 
-        public async Task<double> GetTaxRate()
+        public async Task<string> GetExternalTaxRate()
         {
             try
             {
-                using (var client = new HttpClient())
-                {
-                    client.BaseAddress = new System.Uri("http://localhost:20550");
-                    client.DefaultRequestHeaders.Accept.Clear();
-                    client.DefaultRequestHeaders.Accept.Add(new MediaTypeWithQualityHeaderValue("application/json"));
-                    HttpResponseMessage response = await client.GetAsync("api/TaxRate/taxaJuros");
-                    if (response.IsSuccessStatusCode)
-                    {  //GET
-                        var taxRate = await response.Content.ReadAsStringAsync();
-                        return double.Parse(taxRate.Replace(".", ","));
-                    }
-                }
+                //Info: bypass ssl certificate check
+                HttpClientHandler clientHandler = new HttpClientHandler();
+                clientHandler.ServerCertificateCustomValidationCallback = (sender, cert, chain, sslPolicyErrors) => { return true; };
+                var client = new HttpClient(clientHandler);
+                client.BaseAddress = new System.Uri("http://localhost:8550/webapitest1/");
+                client.DefaultRequestHeaders.Accept.Clear();
+                //client.DefaultRequestHeaders.Accept.Add(new MediaTypeWithQualityHeaderValue("application/json"));
+                HttpResponseMessage response = await client.GetAsync("api/TaxRate/taxajuros");
+                if (response.IsSuccessStatusCode)
+                {   
+                    //GET
+                    client.Dispose();
+                    return await response.Content.ReadAsStringAsync();                        
+                }                
             }
-            catch (Exception)
+            catch (Exception ex)
             {
-                throw new Exception("Impossível acessar a Api1, o projeto WebApi1 deve ser iniciado em paralelo ao WebApi2.");
+                throw new Exception("Impossível acessar a Api1. Detalhes: " + ex.Message);
             }
-            return 0;
+            return "0";
         }
 
         private double Truncate(double valor)

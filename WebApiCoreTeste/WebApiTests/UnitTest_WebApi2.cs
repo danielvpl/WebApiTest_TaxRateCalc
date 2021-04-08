@@ -1,7 +1,6 @@
 using Application.Interfaces;
 using Application.Repositories;
 using Domain.Interfaces.Services;
-using Domain.Services;
 using Microsoft.AspNetCore.Mvc;
 using Moq;
 using WebApiCore.Controllers;
@@ -23,28 +22,44 @@ namespace WebApiTests
         }
 
         [Fact]
-        public void IsOkAndReturnsCalcResult()
+        public async void IsOkAndReturnsCalcResult()
         {
             //Given
             double initValue = 100;
             int months = 5;
-            double tax = 0.01;
+            string tax = "0.01";
+            double result = 105.01;
 
             _mockCalcTaxRateService
-                .Setup(x => x.GetTaxRate())
+                .Setup(x => x.GetExternalTaxRate())
                 .ReturnsAsync(tax);
 
             _mockCalcTaxRateService
-                .Setup(x => x.CalcTaxRate(initValue, months, tax))
-                .Returns(105.10);
+                .Setup(x => x.CalcTaxRate(initValue, months, double.Parse(tax)))
+                .Returns(result);
 
             // Act
-            var data = _controller.CalculaJuros(initValue, months);
+            var data = await _controller.CalculaJuros(initValue, months);
 
             // Assert
             Assert.IsType<OkObjectResult>(data.Result);            
             Assert.IsAssignableFrom<ActionResult<double>>(data);
-            Assert.Equal(105.10, ((ObjectResult)data.Result).Value);
+            Assert.Equal(result, ((ObjectResult)data.Result).Value);
+        }
+
+        [Fact]
+        public void ReturnsProjectRepositoryUrl()
+        {
+            //Given
+            string repositoryUrl = "https://github.com/danielvpl/WebApiTest_TaxRateCalc.git";
+            
+            // Act
+            var data =  _controller.ShowMeTheCode();
+
+            // Assert
+            Assert.IsType<OkObjectResult>(data.Result);
+            Assert.IsAssignableFrom<ActionResult<string>>(data);
+            Assert.Equal(repositoryUrl, ((ObjectResult)data.Result).Value);
         }
     }
 }

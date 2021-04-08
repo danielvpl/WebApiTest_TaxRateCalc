@@ -17,7 +17,7 @@ namespace WebApiCore.Controllers
             _taxRateApp = taxTRateApp;
         }
 
-        // GET: api/<controller>
+        // GET: api/<controller>/taxajuros
         [HttpGet("taxaJuros")]       
         public ActionResult<double> Get()
         {

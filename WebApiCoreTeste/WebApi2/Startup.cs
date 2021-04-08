@@ -54,7 +54,7 @@ namespace WebApi2
             // specifying the Swagger JSON endpoint.
             app.UseSwaggerUI(c =>
             {
-                c.SwaggerEndpoint("/swagger/v1/swagger.json", "CalcTaxRate V1");
+                c.SwaggerEndpoint("../swagger/v1/swagger.json", "CalcTaxRate V1");
             });
         }
     }

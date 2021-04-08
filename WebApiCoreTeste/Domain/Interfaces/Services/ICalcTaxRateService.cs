@@ -4,7 +4,7 @@ namespace Domain.Interfaces.Services
 {
     public interface ICalcTaxRateService
     {
-        Task<double> GetTaxRate();
+        Task<string> GetExternalTaxRate();
         double CalcTaxRate(double initValue, int months, double taxRate);
     }
 }

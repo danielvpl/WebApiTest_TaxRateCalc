@@ -1,8 +1,10 @@
 ﻿
+using System.Threading.Tasks;
+
 namespace Application.Interfaces
 {
     public interface ICalcTaxRateApp
     {
-        double CalcTaxRate(double initValue, int months);
+       Task<double> CalcTaxRate(double initValue, int months);
     }
 }

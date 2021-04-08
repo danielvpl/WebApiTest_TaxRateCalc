@@ -1,6 +1,5 @@
 ﻿using Application.Interfaces;
 using Domain.Interfaces.Services;
-using System.Threading.Tasks;
 
 namespace Application.Repositories
 {

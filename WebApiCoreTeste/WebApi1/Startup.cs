@@ -48,7 +48,6 @@ namespace WebApiCore
 
             app.UseDefaultFiles();
             app.UseStaticFiles();
-            app.UseHttpsRedirection();
 
             app.UseRouting();
             app.UseEndpoints(endpoints =>
@@ -62,7 +61,7 @@ namespace WebApiCore
             // specifying the Swagger JSON endpoint.
             app.UseSwaggerUI(c =>
             {
-                c.SwaggerEndpoint("/swagger/v1/swagger.json", "TaxRate V1");
+                c.SwaggerEndpoint("../swagger/v1/swagger.json", "TaxRate V1");
             });
         }
     }

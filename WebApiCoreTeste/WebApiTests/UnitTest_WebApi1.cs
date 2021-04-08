@@ -39,7 +39,7 @@ namespace WebApiTests
 
             // Assert            
             Assert.IsAssignableFrom<ActionResult<double>>(data);
-            Assert.Equal(0.01, ((ObjectResult)data.Result).Value);
+            Assert.Equal(decimal.Parse("0,01"), ((ObjectResult)data.Result).Value);
         }
     }
 }
