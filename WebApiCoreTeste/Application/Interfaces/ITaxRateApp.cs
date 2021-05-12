@@ -1,8 +1,7 @@
-﻿
-namespace Application.Interfaces
+﻿namespace Application.Interfaces
 {
     public interface ITaxRateApp
     {
-        double Get();
+        double Get();        
     }
 }

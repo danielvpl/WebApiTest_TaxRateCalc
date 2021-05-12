@@ -6,5 +6,6 @@ namespace Application.Interfaces
     public interface ICalcTaxRateApp
     {
        Task<double> CalcTaxRate(double initValue, int months);
+       Task<string> GetExternalTaxRate();
     }
 }

@@ -2,6 +2,7 @@ using Application.Interfaces;
 using Application.Repositories;
 using Domain.Interfaces.Services;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.Extensions.Configuration;
 using Moq;
 using WebApiCore.Controllers;
 using Xunit;
@@ -11,14 +12,12 @@ namespace WebApiTests
     public class UnitTest_WebApi2
     {
         private readonly CalcTaxRateController _controller;
-        private readonly ICalcTaxRateApp _calcTaxRateApp;
-        private readonly Mock<ICalcTaxRateService> _mockCalcTaxRateService;
-
+        private readonly Mock<ICalcTaxRateApp> _mockCalcTaxRateApp;
+        
         public UnitTest_WebApi2()
         {
-            _mockCalcTaxRateService = new Mock<ICalcTaxRateService>();
-            _calcTaxRateApp = new CalcTaxRateApp(_mockCalcTaxRateService.Object);
-            _controller = new CalcTaxRateController(_calcTaxRateApp);
+            _mockCalcTaxRateApp = new Mock<ICalcTaxRateApp>();
+            _controller = new CalcTaxRateController(_mockCalcTaxRateApp.Object);
         }
 
         [Fact]
@@ -30,13 +29,13 @@ namespace WebApiTests
             string tax = "0.01";
             double result = 105.01;
 
-            _mockCalcTaxRateService
+            _mockCalcTaxRateApp
                 .Setup(x => x.GetExternalTaxRate())
                 .ReturnsAsync(tax);
 
-            _mockCalcTaxRateService
-                .Setup(x => x.CalcTaxRate(initValue, months, double.Parse(tax)))
-                .Returns(result);
+            _mockCalcTaxRateApp
+                .Setup(x => x.CalcTaxRate(initValue, months))
+                .ReturnsAsync(result);
 
             // Act
             var data = await _controller.CalculaJuros(initValue, months);

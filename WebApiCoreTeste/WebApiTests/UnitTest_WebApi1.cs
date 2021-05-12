@@ -3,6 +3,7 @@ using Application.Repositories;
 using Domain.Interfaces.Services;
 using Domain.Services;
 using Microsoft.AspNetCore.Mvc;
+using System;
 using WebApiCore.Controllers;
 using Xunit;
 
@@ -39,7 +40,7 @@ namespace WebApiTests
 
             // Assert            
             Assert.IsAssignableFrom<ActionResult<double>>(data);
-            Assert.Equal(decimal.Parse("0,01"), ((ObjectResult)data.Result).Value);
+            Assert.Equal(Double.Parse("0,01"), ((ObjectResult)data.Result).Value);
         }
     }
 }
