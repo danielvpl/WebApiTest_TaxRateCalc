@@ -1,8 +1,5 @@
 using Application.Interfaces;
-using Application.Repositories;
-using Domain.Interfaces.Services;
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.Extensions.Configuration;
 using Moq;
 using WebApiCore.Controllers;
 using Xunit;
